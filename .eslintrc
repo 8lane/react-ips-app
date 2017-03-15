@@ -1,0 +1,17 @@
+{
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "mocha": true
+  },
+  "rules": {
+    "react/prefer-stateless-function": 0,
+    "no-console": 0,
+    "react/jsx-filename-extension": 0,
+    "comma-dangle": 0,
+    "quote-props": 0
+  }
+}
