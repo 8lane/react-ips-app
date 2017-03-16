@@ -1,4 +1,5 @@
 import React from 'react';
+
 import TopicList from '../components/TopicList';
 
 class TopicListContainer extends React.Component {
@@ -28,7 +29,7 @@ class TopicListContainer extends React.Component {
   }
 
   render() {
-    return <TopicList topics={this.state.topics} />;
+    return <TopicList topics={this.state.topics} onTopicOpen={this.handleTopicOpen} />;
   }
 }
 

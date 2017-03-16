@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 
-import TopicListContainer from './containers/TopicListContainer';
 import LoginFormContainer from './containers/LoginFormContainer';
 
 import logo from './logo.svg';
@@ -45,12 +45,13 @@ class App extends Component {
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
+          <Link to="/about">About</Link>
           {introMessage}
         </div>
-        <div className="App-intro">
-          <LoginFormContainer />
-          <br />
-          <TopicListContainer />
+        <LoginFormContainer />
+        <br />
+        <div className="content">
+          {this.props.children}
         </div>
       </div>
     );

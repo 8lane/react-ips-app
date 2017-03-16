@@ -1,17 +1,16 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 class TopicList extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
   render() {
     let topics = null;
 
     if (this.props.topics) {
       topics = this.props.topics.map(topic =>
         <li key={topic.id}>
-          <h3>{topic.title}</h3>
+          <Link to={`/topic/${topic.id}`}>
+            <h3>{topic.title}</h3>
+          </Link>
         </li>
       );
     }

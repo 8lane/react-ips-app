@@ -6,8 +6,8 @@ class LoginFormContainer extends React.Component {
     super(props);
 
     this.state = {
-      username: 'tctc91@gmail.com',
-      password: 'wtf',
+      username: null,
+      password: null,
       fullName: null,
       formValid: true,
       formError: null,
