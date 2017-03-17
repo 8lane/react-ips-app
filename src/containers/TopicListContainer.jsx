@@ -4,7 +4,7 @@ import store from '../store';
 
 import TopicList from '../components/TopicList';
 
-const TopicListContainer = class extends React.Component {
+class TopicListContainer extends React.Component {
   componentDidMount() {
     const username = '570dd55cef79003861ef3a2e936d87fb';
     const password = '';
@@ -33,7 +33,7 @@ const TopicListContainer = class extends React.Component {
   render() {
     return <TopicList topics={this.props.topics} />;
   }
-};
+}
 
 const mapStateToProps = function (store) {
   return {

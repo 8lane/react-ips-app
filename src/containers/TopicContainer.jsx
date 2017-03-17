@@ -5,7 +5,7 @@ import Topic from '../components/Topic';
 class TopicContainer extends React.Component {
   constructor() {
     super();
-    this.state = { topicData: null };
+    this.state = { totalPosts: null, posts: null };
   }
 
   componentDidMount() {
@@ -25,13 +25,14 @@ class TopicContainer extends React.Component {
       .then(res => res.json())
       .catch(err => console.log(err));
 
-    fetchTopic.then(res => this.setState({ topicData: res }));
+    fetchTopic.then(data => this.setState({ totalPosts: data.totalResults, posts: data.results }));
   }
 
   render() {
     return (
       <div className="Container">
-        <Topic topic={this.state.topicData} />
+        <h1>Topic: xxx, total of {this.state.totalPosts} posts</h1>
+        <Topic posts={this.state.posts} />
       </div>
     );
   }

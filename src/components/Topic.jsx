@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 class Topic extends React.Component {
   static createPostMarkup(post) {
     return { __html: post };
@@ -17,10 +16,9 @@ class Topic extends React.Component {
   render() {
     return (
       <div>
-        {this.props.topic &&
+        {this.props.posts &&
           <div>
-            <h1>Topic: xxx, total of {this.props.topic.totalResults} posts</h1>
-            {this.props.topic.results.map(post => Topic.createPost(post))}
+            {this.props.posts.map(post => Topic.createPost(post))}
           </div>
         }
       </div>
