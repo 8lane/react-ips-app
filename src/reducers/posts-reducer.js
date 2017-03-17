@@ -4,6 +4,7 @@ import {
 
 const initialState = {
   isFetching: false,
+  topicId: null,
   posts: [],
   totalPosts: 0,
   hasError: false
@@ -29,6 +30,7 @@ const postsReducer = function (state = initialState, action) {
       return {
         ...state,
         isFetching: false,
+        topicId: action.topicId,
         posts: action.posts,
         totalPosts: action.totalPosts
       };

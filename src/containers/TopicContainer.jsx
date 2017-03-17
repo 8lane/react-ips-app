@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import store from '../store';
+import { fetchPostsIfNeeded } from '../actions';
 
 import Topic from '../components/Topic';
 
@@ -9,38 +9,13 @@ class TopicContainer extends React.Component {
     isFetching: PropTypes.bool.isRequired,
     posts: PropTypes.arrayOf(PropTypes.object).isRequired,
     totalPosts: PropTypes.number.isRequired,
-    hasError: PropTypes.bool.isRequired
+    hasError: PropTypes.bool.isRequired,
+    dispatch: PropTypes.func.isRequired
   };
 
   componentDidMount() {
-    store.dispatch({ type: 'FETCH_POSTS' });
-    this.fetchPosts();
-  }
-
-  fetchPosts() {
-    const username = '570dd55cef79003861ef3a2e936d87fb';
-    const password = '';
-    const auth = `${username}:${password}`;
-
-    const requestOptions = {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Basic ${btoa(auth)}`
-      }
-    };
-
-    return fetch(`/api/forums/topics/${this.props.routeParams.id}`, requestOptions)
-      .then(res => res.json())
-      .then(json => store.dispatch({
-        type: 'GOT_POSTS',
-        posts: json.results,
-        totalPosts: json.totalResults
-      }))
-      .catch(() => store.dispatch({
-        type: 'FAILED_POSTS',
-        hasError: true
-      }));
+    const { dispatch } = this.props;
+    dispatch(fetchPostsIfNeeded(this.props.routeParams.id));
   }
 
   render() {
