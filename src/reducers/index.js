@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
 
-import topicListReducer from './topic-list-reducer';
+import topicList from './topic-list-reducer';
+import posts from './posts-reducer';
 
 const reducers = combineReducers({
-  topicListState: topicListReducer
+  topicListState: topicList,
+  postsState: posts
 });
 
 export default reducers;

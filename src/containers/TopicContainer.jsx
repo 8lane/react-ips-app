@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import store from '../store';
 
 import Topic from '../components/Topic';
 
 class TopicContainer extends React.Component {
-  constructor() {
-    super();
-    this.state = { totalPosts: null, posts: null };
-  }
+  static propTypes = {
+    isFetching: PropTypes.bool.isRequired,
+    posts: PropTypes.arrayOf(PropTypes.object).isRequired,
+    totalPosts: PropTypes.number.isRequired
+  };
 
   componentDidMount() {
+    store.dispatch({ type: 'FETCH_POSTS' });
+
+    this.fetchPosts().then((data) => {
+      store.dispatch({
+        type: 'GOT_POSTS',
+        posts: data.results,
+        totalPosts: data.totalResults
+      });
+    });
+  }
+
+  fetchPosts() {
     const username = '570dd55cef79003861ef3a2e936d87fb';
     const password = '';
     const auth = `${username}:${password}`;
@@ -21,21 +36,40 @@ class TopicContainer extends React.Component {
       }
     };
 
-    const fetchTopic = fetch(`/api/forums/topics/${this.props.routeParams.id}`, requestOptions)
+    return fetch(`/api/forums/topics/${this.props.routeParams.id}`, requestOptions)
       .then(res => res.json())
       .catch(err => console.log(err));
-
-    fetchTopic.then(data => this.setState({ totalPosts: data.totalResults, posts: data.results }));
   }
 
   render() {
     return (
       <div className="Container">
-        <h1>Topic: xxx, total of {this.state.totalPosts} posts</h1>
-        <Topic posts={this.state.posts} />
+        {this.props.isFetching &&
+          <span>hi</span>
+        }
+        {this.props.posts.length > 0 &&
+          <div>
+            <h1>Topic: xxx, total of {this.props.totalPosts} posts</h1>
+            <Topic posts={this.props.posts} />
+          </div>
+        }
       </div>
     );
   }
 }
 
-export default TopicContainer;
+const mapStateToProps = function (state) {
+  const { postsState } = state;
+  const { isFetching, posts, totalPosts } = postsState || {
+    isFetching: true,
+    posts: []
+  };
+
+  return {
+    isFetching,
+    posts,
+    totalPosts
+  };
+};
+
+export default connect(mapStateToProps)(TopicContainer);
