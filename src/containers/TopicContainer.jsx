@@ -8,19 +8,13 @@ class TopicContainer extends React.Component {
   static propTypes = {
     isFetching: PropTypes.bool.isRequired,
     posts: PropTypes.arrayOf(PropTypes.object).isRequired,
-    totalPosts: PropTypes.number.isRequired
+    totalPosts: PropTypes.number.isRequired,
+    hasError: PropTypes.bool.isRequired
   };
 
   componentDidMount() {
     store.dispatch({ type: 'FETCH_POSTS' });
-
-    this.fetchPosts().then((data) => {
-      store.dispatch({
-        type: 'GOT_POSTS',
-        posts: data.results,
-        totalPosts: data.totalResults
-      });
-    });
+    this.fetchPosts();
   }
 
   fetchPosts() {
@@ -38,7 +32,15 @@ class TopicContainer extends React.Component {
 
     return fetch(`/api/forums/topics/${this.props.routeParams.id}`, requestOptions)
       .then(res => res.json())
-      .catch(err => console.log(err));
+      .then(json => store.dispatch({
+        type: 'GOT_POSTS',
+        posts: json.results,
+        totalPosts: json.totalResults
+      }))
+      .catch(() => store.dispatch({
+        type: 'FAILED_POSTS',
+        hasError: true
+      }));
   }
 
   render() {
@@ -47,6 +49,11 @@ class TopicContainer extends React.Component {
         {this.props.isFetching &&
           <span>hi</span>
         }
+
+        {this.props.hasError &&
+          <span>Uh oh, something broke whilst fetching posts!</span>
+        }
+
         {this.props.posts.length > 0 &&
           <div>
             <h1>Topic: xxx, total of {this.props.totalPosts} posts</h1>
@@ -60,15 +67,17 @@ class TopicContainer extends React.Component {
 
 const mapStateToProps = function (state) {
   const { postsState } = state;
-  const { isFetching, posts, totalPosts } = postsState || {
+  const { isFetching, posts, totalPosts, hasError } = postsState || {
     isFetching: true,
-    posts: []
+    posts: [],
+    hasError: false
   };
 
   return {
     isFetching,
     posts,
-    totalPosts
+    totalPosts,
+    hasError
   };
 };
 

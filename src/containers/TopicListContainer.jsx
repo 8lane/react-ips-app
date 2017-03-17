@@ -5,7 +5,7 @@ import store from '../store';
 import TopicList from '../components/TopicList';
 
 class TopicListContainer extends React.Component {
-  componentDidMount() {
+  static fetchTopicList() {
     const username = '570dd55cef79003861ef3a2e936d87fb';
     const password = '';
     const auth = `${username}:${password}`;
@@ -18,16 +18,19 @@ class TopicListContainer extends React.Component {
       }
     };
 
-    const fetchTopicList = fetch('/api/forums/topics', requestOptions)
+    return fetch('/api/forums/topics', requestOptions)
       .then(res => res.json())
+      .then((data) => {
+        store.dispatch({
+          type: 'TOPIC_LIST_SUCCESS',
+          topics: data.results
+        });
+      })
       .catch(err => console.log(err));
+  }
 
-    fetchTopicList.then((data) => {
-      store.dispatch({
-        type: 'TOPIC_LIST_SUCCESS',
-        topics: data.results
-      });
-    });
+  componentDidMount() {
+    TopicListContainer.fetchTopicList();
   }
 
   render() {
