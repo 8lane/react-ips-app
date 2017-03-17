@@ -1,13 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import store from '../store';
 
 import TopicList from '../components/TopicList';
 
-class TopicListContainer extends React.Component {
-  constructor() {
-    super();
-    this.state = { topics: [] };
-  }
-
+const TopicListContainer = class extends React.Component {
   componentDidMount() {
     const username = '570dd55cef79003861ef3a2e936d87fb';
     const password = '';
@@ -21,16 +18,27 @@ class TopicListContainer extends React.Component {
       }
     };
 
-    const fetchApiDefaults = fetch('/api/forums/topics', requestOptions)
+    const fetchTopicList = fetch('/api/forums/topics', requestOptions)
       .then(res => res.json())
       .catch(err => console.log(err));
 
-    fetchApiDefaults.then(data => this.setState({ topics: data.results }));
+    fetchTopicList.then((data) => {
+      store.dispatch({
+        type: 'TOPIC_LIST_SUCCESS',
+        topics: data.results
+      });
+    });
   }
 
   render() {
-    return <TopicList topics={this.state.topics} onTopicOpen={this.handleTopicOpen} />;
+    return <TopicList topics={this.props.topics} />;
   }
-}
+};
 
-export default TopicListContainer;
+const mapStateToProps = function (store) {
+  return {
+    topics: store.topicListState.topics
+  };
+};
+
+export default connect(mapStateToProps)(TopicListContainer);

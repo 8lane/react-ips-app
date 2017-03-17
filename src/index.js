@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Provider } from 'react-redux';
+import store from './store';
 
 import App from './App';
 import TopicListContainer from './containers/TopicListContainer';
 import TopicContainer from './containers/TopicContainer';
-import Topic from './components/Topic';
 
 import './index.css';
 
@@ -18,14 +19,17 @@ class About extends React.Component {
 }
 
 ReactDOM.render(
-  <Router history={browserHistory}>
-    <Route path="/" component={App}>
-      <IndexRoute component={TopicListContainer} />
-      <Route path="about" component={About} />
-      <Route path="topic" component={TopicContainer}>
-        <Route path=":id" component={Topic} />
+  <Provider store={store}>
+    <Router history={browserHistory}>
+      <Route path="/" component={App}>
+        <IndexRoute component={TopicListContainer} />
+        <Route path="about" component={About} />
+        <Route path="topic">
+          <IndexRoute component={TopicListContainer} />
+          <Route path=":id" component={TopicContainer} />
+        </Route>
       </Route>
-    </Route>
-  </Router>,
+    </Router>
+  </Provider>,
   rootElement
 );

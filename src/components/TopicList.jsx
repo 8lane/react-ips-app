@@ -2,20 +2,18 @@ import React from 'react';
 import { Link } from 'react-router';
 
 class TopicList extends React.Component {
+  static createTopicItem(topic) {
+    return (
+      <li key={topic.id}>
+        <Link to={`/topic/${topic.id}`}>
+          <h3>{topic.title}</h3>
+        </Link>
+      </li>
+    );
+  }
+
   render() {
-    let topics = null;
-
-    if (this.props.topics) {
-      topics = this.props.topics.map(topic =>
-        <li key={topic.id}>
-          <Link to={`/topic/${topic.id}`}>
-            <h3>{topic.title}</h3>
-          </Link>
-        </li>
-      );
-    }
-
-    return <ul>{topics}</ul>;
+    return <ul>{this.props.topics.map(topic => TopicList.createTopicItem(topic))}</ul>;
   }
 }
 
